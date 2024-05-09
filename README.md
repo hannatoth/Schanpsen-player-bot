@@ -46,4 +46,23 @@ Without doubt, the most important thing to improve upon the work described in th
 
 The purpose of ranking the cards by strength, is to create a feature vector for each possible belief state of the game. Based on this vector the agent is able to evaluate how much a move would affect the hand’s potential to gain points in the upcoming states. Considering this could be done in the first turn of the game with as little as 32 belief state samples, this does not seem like an unrealistic goal to achieve. However, it is necessary to see how much value does the specific heuristic has compared to increasing the sampling database.
 
-Costwise, the time-, and-space-complexity of calculating one particular potential move did not significantly increase with either options, so the only measurable factor remains
+Costwise, the time-, and-space-complexity of calculating one particular potential move did not significantly increase with either options, so the only measurable factor remains the number of scored points in each game. To gain relevant insight into the efficiency of heuristics, we should create more in-depth variants of state-evaluation. Due to the restricted time, this paper only focuses on the ones that eval- uate future hand-potential. It provides guidelines on what evaluation strate- gies need further exploration, for instance: precise prediction of the opponent possible cards, counting the ratio of strong cards in the players’ hands or the tallon etc. The results forecast that the heuristics should be combined in order to outplay the bots using enlarged sampling size.
+
+
+## Experimental Setup
+
+The hypothesis was that changing either the sample size or the depth of a bot which relies heavily on PIMS would result in a greater change in the outcome of games, than the implementation of heuristics to the same bot would.
+The framework for the experiment is very straight forward. We cre- ated 4 different bots (all based on PIMS): rdeep(trump), rdeep(higher-lower), rdeep(bigsample) and rdeep(bigdepth).
+Rdeep(trump) is a bot which evaluates a given position by the number of trumps it has in it’s hands, rather than by the number of points it has accumulated and it uses this information to act accordingly.
+Rdeep(higher-lower) is a similar bot, however the main difference is that it evaluates every single card in the sample of possible moves and orders them from best to worst and in the first phase of the game it opts for the weakest possible choice, while it does the opposite in the second phase, where it always plays the strongest possible move.
+Rdeep(bigsample) is a PIMS based bot that has a larger than average sample size and from this increased amount of data it has a ”better under- standing” of what move it should play, meaning that it will make a choice based upon more variables.
+Rdeep(bigdepth) also has more data to work with, however this data is directed towards going deeper down into the search branches.
+
+## Statistical testing and Conclusion
+
+The way we tested the hypothesis was by running 4 separate tournaments, each of our bots versus a bot which plays random legal moves. Of course we had to keep in mind that the game is a partial information game and there is also a great amount of luck involved with the cards you are dealt. Therefore the amount of games played must be substantial, we went with 5000 parties between pairs.
+From the tournaments played we could gather statistics on how many points our bots won against the random bot. This information is of essence because the relative distance from the original ratio of points between the two bots (random bot vs rdeep bot) gives us a numerical value of how significant the changes were with regards to the outcome of the tournament.
+
+The findings clearly disprove our hypothesis. The relative distance from the original ratio of points gained shifted drastically with the implementation of heuristics to the bots, while the tinkering of sample sizes an depths only nudged the ratio a small amount.
+Our experiment concludes that the rdeep bot, while using the heuristics written by us becomes unviable compared to the original bot.
+Below there is a bar-chart of distances from the original ratio of points scored by the bots compared to random.
